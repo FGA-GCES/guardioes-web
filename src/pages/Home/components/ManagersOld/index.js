@@ -1,12 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { connect } from 'react-redux';
-import {
-  setManagers
-} from 'actions/';
-import { bindActionCreators } from 'redux';
-import getAllManagers from './services/getAllManagers'
-import createManager from './services/createManager'
-import deleteManager from './services/deleteManager'
+import React, { useEffect, useState } from "react";
+import { connect } from "react-redux";
+import { setManagers } from "actions/";
+import { bindActionCreators } from "redux";
+import getAllManagers from "./services/getAllManagers";
+import createManager from "./services/createManager";
+import deleteManager from "./services/deleteManager";
 
 import {
   Container,
@@ -18,11 +16,11 @@ import {
   Inputs,
   InputBlock,
   Input,
-  SubmitButton
-} from './styles';
+  SubmitButton,
+} from "./styles";
 import { useForm } from "react-hook-form";
 
-import ContentBox from '../ContentBox';
+import ContentBox from "../ContentBox";
 
 const Managers = ({
   token,
@@ -30,50 +28,48 @@ const Managers = ({
   // managers,
   // setManagers
 }) => {
+  const [managers, setManagers] = useState();
 
-  const [managers, setManagers] = useState()
-
-  const { handleSubmit } = useForm()
-  const [managerName, setManagerName] = useState("")
+  const { handleSubmit } = useForm();
+  const [managerName, setManagerName] = useState("");
 
   const _createManager = async () => {
-    const data = {
-
-    }
-    const reponse = await createManager(data, token)
-    setManagerName("")
-  }
+    const data = {};
+    const reponse = await createManager(data, token);
+    setManagerName("");
+  };
 
   const _deleteManager = async (id, token) => {
-    deleteManager(id, token)
-  }
+    deleteManager(id, token);
+  };
 
   const loadManagers = async (token) => {
-    const response = await getAllManagers(token)
+    const response = await getAllManagers(token);
     let aux_managers = [];
-    response.managers.map(manager => {
+    response.managers.map((manager) => {
       aux_managers.push({
-        "id": manager.id,
-        "name": manager.description
-      })
-    })
-    setManagers(aux_managers)
-  }
+        id: manager.id,
+        name: manager.description,
+      });
+    });
+    setManagers(aux_managers);
+  };
 
   useEffect(() => {
-    console.log(token)
+    console.log(token);
     // loadManagers(token)
   }, [token]);
 
-  const fields =
-    [{
+  const fields = [
+    {
       key: "id",
-      value: "ID"
+      value: "ID",
     },
     {
       key: "name",
       value: "Nome",
-    }];
+    },
+  ];
 
   return (
     <Container>
@@ -102,28 +98,19 @@ const Managers = ({
                 />
               </InputBlock>
             </Inputs>
-            <SubmitButton type="submit">
-              Adicionar
-            </SubmitButton>
+            <SubmitButton type="submit">Adicionar</SubmitButton>
           </Form>
         </ContainerForm>
       </AddAppContainer>
-    </Container >
+    </Container>
   );
-}
+};
 
 const mapStateToProps = (state) => ({
   token: state.user.token,
   user: state.user.user,
 });
 
-const mapDispatchToProps = (dispatch) => bindActionCreators(
-  {
-  },
-  dispatch,
-);
+const mapDispatchToProps = (dispatch) => bindActionCreators({}, dispatch);
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Managers);
+export default connect(mapStateToProps, mapDispatchToProps)(Managers);

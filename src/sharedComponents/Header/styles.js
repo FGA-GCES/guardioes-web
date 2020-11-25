@@ -1,8 +1,7 @@
-import styled from 'styled-components';
-import { device } from 'utils/devices';
-import {
-  Link,
-} from "react-router-dom";
+import styled from "styled-components";
+import { device } from "utils/devices";
+import { Link } from "react-router-dom";
+import { colors } from "../../assets/colors/colors";
 
 export const Container = styled.div`
   left: 0%;
@@ -10,7 +9,7 @@ export const Container = styled.div`
   top: 0%;
   bottom: 0%;
   height: 70px;
-  background: #5dd39e;
+  background: ${colors.MARINE_GREEN};
   box-shadow: 0px 4px 30px rgba(0, 0, 0, 0.1);
   display: flex;
   align-items: center;
@@ -18,49 +17,48 @@ export const Container = styled.div`
   padding: 0% 2%;
 `;
 
-
 export const Logo = styled.img`
   width: 80px;
   height: 35px;
 `;
 
 export const HeaderNav = styled.div`
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    width: max(200px, 30vw);
-    margin-right: 20px;
-    @media ${device.mobileL} {
-      margin-right: 10px;
-    };
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  width: max(200px, 30vw);
+  margin-right: 20px;
+  @media ${device.mobileL} {
+    margin-right: 10px;
+  } ;
 `;
 
 export const NavTo = styled(Link)`
-    text-decoration: none;
-    font-family: argumentum, sans-serif;
-    font-style: normal;
-    font-weight: 500;
-    font-size: 22px;
-    line-height: 1.825rem;
-    color: #FFFFFF;
-    margin-left: 10px;
+  text-decoration: none;
+  font-family: argumentum, sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 22px;
+  line-height: 1.825rem;
+  color: ${colors.WHITE};
+  margin-left: 10px;
 
-    @media ${device.mobileL} {
-      font-size: 15px;
-    };
+  @media ${device.mobileL} {
+    font-size: 15px;
+  } ;
 `;
 
 export const Logout = styled.p`
   text-decoration: none;
-    font-family: argumentum, sans-serif;
-    font-style: normal;
-    font-weight: 500;
-    font-size: 22px;
-    line-height: 1.825rem;
-    color: #FFFFFF;
-    margin-left: 10px;
+  font-family: argumentum, sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 22px;
+  line-height: 1.825rem;
+  color: ${colors.WHITE};
+  margin-left: 10px;
 
-    @media ${device.mobileL} {
-      font-size: 15px;
-    };
+  @media ${device.mobileL} {
+    font-size: 15px;
+  } ;
 `;
