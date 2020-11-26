@@ -1,33 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import {
-  Container,
-  AddContentContainer,
-  ContainerHeader,
-  ContainerTitle,
-  ContainerForm,
-  InputBlock,
-  SubmitButton,
-  EditInput,
-  ImageSelector,
-  ImageContainer,
-  ImgContent,
-  TextArea
-} from './styles';
+import { Container, SubmitButton, EditInput, TextArea } from './styles';
 import { useForm } from "react-hook-form";
 import ContentBox from '../ContentBox';
 import getAllContents from './services/getAllContents'
 import deleteContent from './services/deleteContent'
 import createContent from './services/createContent'
 import editContent from './services/editContent';
-import { contentIcons } from '../../../../utils/contentIcons';
 import { connect } from 'react-redux';
-import {
-  setContents,
-  setToken
-} from 'actions/';
+import { setContents, setToken } from 'actions/';
 import { bindActionCreators } from 'redux';
 import { sessionService } from 'redux-react-session';
 import Modal from 'react-bootstrap/Modal';
+import FormCreateContent from './FormContent/index';
+import IconSelector from './IconSelector/index';
+import TypeSelector from './TypeSelector/index';
 
 const Contents = ({
   contents,
@@ -48,11 +34,6 @@ const Contents = ({
   ];
 
   const { handleSubmit } = useForm();
-  const [title, setTitle] = useState("");
-  const [body, setBody] = useState("");
-  const [icon, setIcon] = useState("");
-  const [content_type, setContentType] = useState("");
-  const [source_link, setSourceLink] = useState("");
 
   const [modalEdit, setModalEdit] = useState(false);
   const [editingContent, setEditingContent] = useState({});
@@ -64,46 +45,12 @@ const Contents = ({
   const [modalShow, setModalShow] = useState(false);
   const [contentShow, setContentShow] = useState({});
 
-  const contentTypeSelect = [
-    {
-      key: "Conselho",
-      value: "text"
-    },
-    {
-      key: "Redirecionamento",
-      value: "redirect"
-    }
-  ];
-
   const _getContents = async (token) => {
     const response = await getAllContents(token)
     if (!response.contents || response.contents.length === 0) {
       response.contents = null;
     }
     setContents(response.contents)
-  }
-
-  const _createContent = async () => {
-    const data = {
-      "content": {
-        title,
-        body,
-        icon,
-        content_type,
-        source_link,
-        app_id: user.app_id
-      }
-    }
-    await createContent(data, token).then((response) => {
-      if (!response.errors) {
-        setTitle("");
-        setBody("");
-        setIcon("");
-        setContentType("");
-        setSourceLink("");
-        _getContents(token)
-      }
-    })
   }
 
   const _editContent = async () => {
@@ -120,12 +67,8 @@ const Contents = ({
     _getContents(token);
   }
 
-  const isIconSelected = (current) => {
-    return current === icon; 
-  }
-
   const isEditIconSelected = (current) => {
-    return current === editIcon; 
+    return current === editIcon;
   }
 
   const handleShow = (content) => {
@@ -202,35 +145,19 @@ const Contents = ({
           </EditInput>
 
           <EditInput>
-              <label>Ícone</label>
-              <ImageSelector>
-                {contentIcons.map((icon, index) => {
-                  if (contentShow.icon === icon.value)
-                    return (
-                      <ImageContainer key={index}>
-                        <ImgContent
-                          src={require(`../../../../${icon.uri}`)}
-                          width={80}
-                          alt="content-icon"
-                        />
-                      </ImageContainer>
-                    )
-                  else return null
-                  })}
-              </ImageSelector>
-            </EditInput>
+            <label>Ícone</label>
+            <IconSelector
+              contentShow={contentShow}
+              type={"show"}
+            />
+          </EditInput>
 
           <EditInput>
             <label>Tipo</label>
-            <select
-              value={contentShow.content_type}
-              className="form-control"
-              disabled
-            >
-              {contentTypeSelect.map((type, index) => (
-                <option key={index} value={type.value}>{type.key}</option>
-              ))}
-            </select>
+            <TypeSelector
+              contentShow={contentShow}
+              type={"show"}
+            />
           </EditInput>
 
           <EditInput>
@@ -256,8 +183,8 @@ const Contents = ({
         <Modal.Header closeButton>
           <Modal.Title>
             Editar Conteúdo
-          </Modal.Title>  
-        </Modal.Header>  
+          </Modal.Title>
+        </Modal.Header>
         <form id="editContent" onSubmit={handleSubmit(_editContent)}>
           <Modal.Body>
             <EditInput>
@@ -283,32 +210,21 @@ const Contents = ({
 
             <EditInput>
               <label>Ícone</label>
-              <ImageSelector>
-                {contentIcons.map((icon, index) => (
-                  <ImageContainer key={index}>
-                    <ImgContent
-                      src={require(`../../../../${icon.uri}`)}
-                      width={80}
-                      onClick={() => setEditIcon(icon.value)}
-                      selected={isEditIconSelected(icon.value)}
-                      alt="content-icon"
-                    />
-                  </ImageContainer>
-                ))}
-              </ImageSelector>
+              <IconSelector
+                contentShow={contentShow}
+                type={"edit"}
+                setEditIcon={setEditIcon}
+                isEditIconSelected={isEditIconSelected}
+              />
             </EditInput>
 
             <EditInput>
               <label>Tipo</label>
-              <select
-                value={editContentType}
-                onChange={e => setEditContentType(e.target.value)}
-                className="form-control"
-              >
-                {contentTypeSelect.map((type, index) => (
-                  <option key={index} value={type.value}>{type.key}</option>
-                ))}
-              </select>
+              <TypeSelector
+                editContentType={editContentType}
+                type={"edit"}
+                setEditContentType={setEditContentType}
+              />
             </EditInput>
 
             <EditInput>
@@ -328,90 +244,21 @@ const Contents = ({
       </Modal>
 
       <Container>
-          <ContentBox 
-            title="Conteúdos" 
-            fields={fields}
-            delete_function={_deleteContent}
-            contents={contents}
-            token={token}
-            handleEdit={handleEdit}
-            handleShow={handleShow}
-          />
+        <ContentBox
+          title="Conteúdos"
+          fields={fields}
+          delete_function={_deleteContent}
+          contents={contents}
+          token={token}
+          handleEdit={handleEdit}
+          handleShow={handleShow}
+        />
 
-        <AddContentContainer className="shadow-sm">
-          <ContainerHeader>
-            <ContainerTitle>Adicionar Conteúdo</ContainerTitle>
-          </ContainerHeader>
-          <ContainerForm>
-            <form id="addContent" onSubmit={handleSubmit(_createContent)}>
-              <InputBlock>
-                <label htmlFor="title">Título</label>
-                <input
-                  type="text"
-                  id="title"
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                />
-              </InputBlock>
-
-              <InputBlock>
-                <label htmlFor="body">Conteúdo</label>
-                <textarea
-                  id="body"
-                  value={body}
-                  onChange={(e) => setBody(e.target.value)}
-                  rows="2"
-                />
-              </InputBlock>
-
-              <EditInput>
-                <label>Ícone</label>
-                <ImageSelector>
-                  {contentIcons.map((icon, index) => (
-                    <ImageContainer key={index}>
-                      <ImgContent
-                        src={require(`../../../../${icon.uri}`)}
-                        width={80}
-                        onClick={() => setIcon(icon.value)}
-                        selected={isIconSelected(icon.value)}
-                        alt="content-icon"
-                      />
-                    </ImageContainer>
-                  ))}
-                </ImageSelector>
-              </EditInput>
-
-              <EditInput>
-                <label>Tipo</label>
-                <select
-                  value={content_type}
-                  onChange={e => setContentType(e.target.value)}
-                  className="form-control"
-                  required
-                >
-                  {contentTypeSelect.map((type, index) => (
-                    <option key={index} value={type.value}>{type.key}</option>
-                  ))}
-                </select>
-              </EditInput>
-
-              <InputBlock>
-                <label htmlFor="body">Link da Fonte</label>
-                <input
-                  type="text"
-                  id="source_link"
-                  value={source_link}
-                  onChange={(e) => setSourceLink(e.target.value)}
-                />
-              </InputBlock>
-
-              {/* <Input type="submit" className="shadow-sm" /> */}
-              <SubmitButton type="submit">
-                Criar
-              </SubmitButton>
-            </form>
-          </ContainerForm>
-        </AddContentContainer>
+        <FormCreateContent
+          user={user}
+          token={token}
+          create_function={createContent}
+        />
       </Container>
     </>
   );
