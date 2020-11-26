@@ -45,17 +45,6 @@ const Contents = ({
   const [modalShow, setModalShow] = useState(false);
   const [contentShow, setContentShow] = useState({});
 
-  const contentTypeSelect = [
-    {
-      key: "Conselho",
-      value: "text"
-    },
-    {
-      key: "Redirecionamento",
-      value: "redirect"
-    }
-  ];
-
   const _getContents = async (token) => {
     const response = await getAllContents(token)
     if (!response.contents || response.contents.length === 0) {

@@ -17,8 +17,8 @@ import createContent from '../services/createContent';
 import getAllContents from '../services/getAllContents'
 import {
   setContents,
-  setToken
 } from 'actions/';
+import contentType from '../contentType';
 
 
 const FormCreateContent = (token, user) => {
@@ -29,17 +29,6 @@ const FormCreateContent = (token, user) => {
   const [icon, setIcon] = useState("");
   const [content_type, setContentType] = useState("");
   const [source_link, setSourceLink] = useState("");
-
-  const contentTypeSelect = [
-    {
-      key: "Conselho",
-      value: "text"
-    },
-    {
-      key: "Redirecionamento",
-      value: "redirect"
-    }
-  ];
 
   const isIconSelected = (current) => {
     return current === icon;
@@ -75,7 +64,6 @@ const FormCreateContent = (token, user) => {
       }
     })
   }
-
 
   return (
     <AddContentContainer className="shadow-sm">
@@ -129,7 +117,7 @@ const FormCreateContent = (token, user) => {
               className="form-control"
               required
             >
-              {contentTypeSelect.map((type, index) => (
+              {contentType.map((type, index) => (
                 <option key={index} value={type.value}>{type.key}</option>
               ))}
             </select>
@@ -145,7 +133,6 @@ const FormCreateContent = (token, user) => {
             />
           </InputBlock>
 
-          {/* <Input type="submit" className="shadow-sm" /> */}
           <SubmitButton type="submit">
             Criar
           </SubmitButton>
@@ -153,8 +140,6 @@ const FormCreateContent = (token, user) => {
       </ContainerForm>
     </AddContentContainer>
   )
-
-
 }
 
 export default FormCreateContent; 
