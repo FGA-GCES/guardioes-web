@@ -1,0 +1,18 @@
+DASHBOARD_TOTAL_USERS 
+
+SELECT count(*) AS "count" 
+FROM "public"."users"
+
+DASHBOARD_TOTAL_SURVEYS
+
+SELECT count(*) AS "count"
+FROM "public"."surveys"
+
+DASHBOARD_REPORTS_SEGUNDA_SEMANA
+
+SELECT (CAST(date_trunc('week', CAST((CAST("public"."surveys"."created_at" AS timestamp) + (INTERVAL '7 day')) AS timestamp)) AS timestamp) + (INTERVAL '-7 day')) AS "created_at", count(*) AS "count"
+FROM "public"."surveys"
+WHERE ("public"."surveys"."created_at" >= timestamp with time zone '2020-06-10 00:00:00.000Z'
+   AND "public"."surveys"."created_at" < timestamp with time zone '2020-12-09 00:00:00.000Z')
+GROUP BY (CAST(date_trunc('week', CAST((CAST("public"."surveys"."created_at" AS timestamp) + (INTERVAL '7 day')) AS timestamp)) AS timestamp) + (INTERVAL '-7 day'))
+ORDER BY (CAST(date_trunc('week', CAST((CAST("public"."surveys"."created_at" AS timestamp) + (INTERVAL '7 day')) AS timestamp)) AS timestamp) + (INTERVAL '-7 day')) ASC

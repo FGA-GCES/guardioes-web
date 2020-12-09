@@ -19,4 +19,6 @@ const getGraphs = async () => api
     return { data: {}, errors: e }
   });
 
+  
+
 export default getGraphs;

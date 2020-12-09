@@ -1,16 +1,25 @@
 const payloads = [
   {
     "resource": {
-      "question": 10
+      "question": process.env.DASHBOARD_TOTAL_USERS_ID
     },
-    "params": {}
+    "params": {      
+    },
   },
   {
     "resource": {
-      "question": 11
+      "question": process.env.DASHBOARD_TOTAL_SURVEYS_ID
     },
-    "params": {}
+    "params": {      
+    },
   },
+  {
+    "resource": {
+      "question": process.env.DASHBOARD_REPORTS_SEGUNDA_SEMANA_ID
+    },
+    "params": {      
+    }
+  }
 ]
 
 export default payloads;
